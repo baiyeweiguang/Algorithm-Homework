@@ -12,7 +12,7 @@ public:
   auto operator()(const int m) const -> Result;
 
 private:
-  static auto schedule(Result &table, const int m) -> void;
+  static auto schedule(Result &table, const int m, const int n) -> void;
 };
 
 } // namespace algo

@@ -1,58 +1,54 @@
 #include "../include/problem1.hpp"
 
-#include <iostream>
 #include <fmt/core.h>
+#include <iostream>
 
 namespace algo {
-auto Scheduler::operator()(const int m) const -> Result {
-  if (m % 2 != 0) {
+auto Scheduler::operator()(const int num) const -> Result {
+  if (num % 2 != 0) {
     return {};
   }
-  Result table(m, std::vector<int>(m - 1, 0));
-  schedule(table, m);
+  Result table(num, std::vector<int>(num - 1, 0));
+  schedule(table, 1, num);
   return table;
 }
-
-auto Scheduler::schedule(Result &table, const int m) -> void {
-  if (m == 2) {
-    table[0][0] = 2;
-    table[1][0] = 1;
+auto Scheduler::schedule(Result &table, const int m, const int n) -> void {
+  if (m + 1 == n) {
+    table[m - 1][0] = n;
+    table[n - 1][0] = m;
     return;
   }
+  int width = n - m;
+  int height = n - m + 1;
+  (void)height;
 
-  // 递归划分m/2个选手的赛程表
-  schedule(table, m / 2);
+  // 递归划分
+  int mid = (m + n) / 2;
+  schedule(table, m, mid);
+  schedule(table, mid + 1, n);
 
-  // 以8个人为例
-  // 2 4
-  // 1 3
-  // 4 2
-  // 3 1
-  // 可见左下角=左上角+m/2，右下角=左上角，右上角=左下角
-
-  // 左下角
-  int mid = m / 2;
-  for (int i = mid; i < m; i++) {
-    for (int j = 0; j < mid - 1; j++) {
-      table[i][j] = table[i - mid][j] + mid;
+  // 合并
+   
+  // 右下角=左上角
+  int offset_x = width / 2 + 1;
+  int offset_y = height / 2;
+  for (int i = m + offset_x; i <= n; i++) {
+    for (int j = width - offset_y + 1; j <= width + 1; j++) {
+      table[i - 1][j - 1] = table[i - offset_x - 1][j - offset_y - 1];
     }
   }
-  // 右下角
-  for (int i = mid; i < m; i++) {
-    for (int j = mid; j < m - 1; j++) {
-      table[i][j] = table[i - mid][j - mid];
+
+  // 右上角=左下角
+  for (int i = m; i < m + offset_x; i++) {
+    for (int j = width - offset_y + 1; j <= width + 1; j++) {
+      table[i - 1][j - 1] = table[i + offset_x - 1][j - offset_y - 1];
     }
   }
-  // 右上角
-  for (int i = 0; i < mid; i++) {
-    for (int j = mid; j < m - 1; j++) {
-      table[i][j] = table[i + mid][j - mid];
-    }
-  }
-  // 中间一列
-  for (int i = 0; i < m; i++) {
-    table[i][mid - 1] = table[m-i-1][mid-2];
-  }
+
+  // 中间一列=中间左边一列的倒序
+  for (int i = 0; i < height; i++) {
+    table[i + m - 1][offset_y - 1] = table[n - i - 1][offset_y - 2];
+  } 
 }
 
 } // namespace algo

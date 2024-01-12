@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "include/problem2.hpp"
+#include "../include/problem2.hpp"
 
 TEST(Problem1Test, Test2) {
   auto config = YAML::LoadFile("../params.yaml");

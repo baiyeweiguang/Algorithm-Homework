@@ -28,7 +28,7 @@ set(TESTS
 
 foreach(test ${TESTS})
   string(REPLACE ".cpp" "" test_name ${test})
-  add_executable(${test_name} ${test} ${SRC})
+  add_executable(${test_name} test/${test} ${SRC})
   target_link_directories(${test_name} PRIVATE include)
   target_link_libraries(${test_name} yaml-cpp fmt::fmt GTest::GTest GTest::Main)
 endforeach(test)

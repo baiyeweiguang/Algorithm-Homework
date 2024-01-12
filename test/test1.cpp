@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "include/problem1.hpp"
+#include "../include/problem1.hpp"
 
 TEST(Problem1Test, Test1) {
   auto config = YAML::LoadFile("../params.yaml");
@@ -30,6 +30,7 @@ TEST(Problem1Test, Test1) {
     }
   }
 
+  std::cout<<"解为:\n";
   for (const auto & row : result) {
     for (const auto & col : row) {
       std::cout << col << " ";
